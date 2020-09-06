@@ -6,6 +6,7 @@ class CreateShape {//instancia o poligono de acordo com o nome
     const shapes = {
       "triangle": Triangle,
       "circle": Circle,
+      "polygon": Polygon
     }
     return new shapes[this.primitive.shape](this.primitive);
   }
@@ -17,7 +18,7 @@ class Triangle {
     this.name = primitive.shape;
     this.vertices = primitive.vertices;
     this.color = primitive.color;
-    this.boundingBox = new BoundingBox(this.vertices);
+    this.boundingBox = new BoundingBox(primitive);
   }
   isPointInside(x, y) {
     /**
@@ -40,6 +41,38 @@ class Triangle {
         return false;
     }
     return true;
+  }
+}
+
+class Polygon{
+  constructor(primitive){
+    this.name = primitive.shape;
+    this.vertices = primitive.vertices;
+    this.color = primitive.color;
+    this.boundingBox = new BoundingBox(primitive);
+    this.triangles = this.fanTriangulation();
+  }
+  isPointInside(x,y){
+    if (!this.boundingBox.isPointInside(x,y))
+      return false;
+    for (const triangle of this.triangles) {
+      if (triangle.isPointInside(x,y))
+        return true;
+    }
+    return false;
+  }
+  fanTriangulation(){
+    let triangles = []
+    const polygon = this.vertices.tolist()
+    const commonPoint = polygon[0]
+    for (let i = 1; i<polygon.length-1; i++){
+      triangles.push(new Triangle({
+        shape:"triangle",
+        vertices: nj.array([commonPoint,polygon[i],polygon[i+1]]),
+        color:this.color
+      }))      
+    }
+    return triangles
   }
 }
 
@@ -66,12 +99,12 @@ class Circle {
 }
 
 
-
 class BoundingBox{
   constructor(primitive, isCircle = false){
-    if (!isCircle)
+    if (isCircle)
+      this.boundingBox = this.getCircleBoundingBox(primitive);
+    else
       this.boundingBox = this.getBoundingBox(primitive.vertices);
-    this.boundingBox = this.getCircleBoundingBox(primitive);
   }
   getBoundingBox(vertices) {
     const minX = vertices.pick(null, 0).min();
