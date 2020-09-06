@@ -7,33 +7,14 @@
 
         /* ------------------------------------------------------------ */
 
-
         
-    function inside(  x, y, primitive  ) {
-            const shapes = {
-                "triangle" : insideTriangle
-            }            
-            return shapes[primitive.shape](x, y, primitive.vertices)
-    }
-
-    function insideTriangle(x, y, vertices) {
-        /**
-         * Implementa mesma tecnica da lista de exercicios
-         */
-        const point = nj.array([x,y])
-        const combinations = [[0,1],[1,2],[2,0]] //combinações de vertices v2-v1 v3-v2 v1-v3
-        const rotate = nj.array([[0,-1],[1,0]]) //matriz de rotação
-        for (let i = 0; i < 3; i++) {
-            let v1 = vertices.pick(combinations[i][0])
-            let v2 = vertices.pick(combinations[i][1])
-            let vectorDirector = nj.subtract(v2,v1)
-            let normal = nj.dot(rotate,vectorDirector)
-            let pointVector = nj.subtract(point, v1)
-            let out = nj.dot(normal, pointVector)
-            if (out.get(0) < 1)//caso o angulo não seja agudo o ponto está fora do trinangulo
-                return false
-        }
-        return true
+    function inside(  x, y, primitive  ) 
+    {
+        const createShape = new CreateShape(primitive.shape, primitive.vertices);
+        const shape = createShape.getInstance();
+        if (!shape.isPointInsideBoundingBox(x,y))
+            return false
+        return shape.isPointInside(x,y);
     }
         
     
