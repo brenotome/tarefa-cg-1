@@ -44,6 +44,7 @@ class Triangle {
   }
 }
 
+
 class Polygon{
   constructor(primitive){
     this.name = primitive.shape;
@@ -76,6 +77,7 @@ class Polygon{
   }
 }
 
+
 class Circle {
   constructor(primitive) {
     this.name = primitive.shape;
@@ -86,6 +88,7 @@ class Circle {
     this.triangles = this.triangulation();
 
   }
+
   isPointInsideByEquation(x, y) {
     // calcula pela equação do circulo
     if (!this.boundingBox.isPointInside(x,y))
@@ -139,6 +142,7 @@ class BoundingBox{
     else
       this.boundingBox = this.getBoundingBox(primitive.vertices);
   }
+
   getBoundingBox(vertices) {
     const minX = vertices.pick(null, 0).min();
     const minY = vertices.pick(null, 1).min();
@@ -146,6 +150,7 @@ class BoundingBox{
     const maxY = vertices.pick(null, 1).max();
     return nj.array([[minX, minY], [maxX, maxY]]);
   }
+
   getCircleBoundingBox(primitive) {
     const centerX = primitive.center.get(0);
     const centerY = primitive.center.get(1);
@@ -157,6 +162,7 @@ class BoundingBox{
     const maxY = centerY + radius;
     return nj.array([[minX, minY], [maxX, maxY]]);
   }
+  
   isPointInside(x, y){
     //verifica se ponto está dentro do box
     const insideX = (x >= this.boundingBox.get(0, 0)) && (x <= this.boundingBox.get(1, 0));
