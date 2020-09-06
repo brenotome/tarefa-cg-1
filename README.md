@@ -8,4 +8,4 @@ exercicios feitos:
 * criar triangulação para poligono convexo
 * criar triangulação para circulo
 
-obs: a detecção "ativa" para o circulo é a triangulação(mais lenta), porem o código da pela equação do circulo ainda está no código na função isPointInsideByEquation
+obs: a detecção "ativa" para o circulo é a triangulação(mais lenta), porem o código usando a equação do circulo ainda está na função isPointInsideByEquation
