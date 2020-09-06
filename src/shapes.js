@@ -1,20 +1,22 @@
 class CreateShape{//instancia o poligono de acordo com o nome
-    constructor(name, vertices){
+    constructor(name, vertices, color){
         this.name = name
         this.vertices = vertices
+        this.color = color
     }
     getInstance(){
         const shapes = {
             "triangle" : Triangle
         }
-        return new shapes[this.name](this.name, this.vertices)
+        return new shapes[this.name](this.name, this.vertices, this.color)
     }
 }
 
 class Triangle{
-    constructor(name, vertices){
+    constructor(name, vertices, color){
         this.name = name;
         this.vertices = vertices;
+        this.color = color;
         this.boundingBox = this.getBoundingBox();
     }
     isPointInside(x,y){

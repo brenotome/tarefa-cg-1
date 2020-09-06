@@ -8,10 +8,8 @@
         /* ------------------------------------------------------------ */
 
         
-    function inside(  x, y, primitive  ) 
+    function inside(  x, y, shape  ) 
     {
-        const createShape = new CreateShape(primitive.shape, primitive.vertices);
-        const shape = createShape.getInstance();
         if (!shape.isPointInsideBoundingBox(x,y))
             return false
         return shape.isPointInside(x,y);
@@ -28,20 +26,17 @@
     Object.assign( Screen.prototype, {
 
             preprocess: function(scene) {
-                // Possible preprocessing with scene primitives, for now we don't change anything
-                // You may define bounding boxes, convert shapes, etc
+                // cria objeto shape e define boundingBox
                 
                 var preprop_scene = [];
-
+                
                 for( var primitive of scene ) {  
-                    // do some processing
-                    // for now, only copies each primitive to a new list
+                    const createShape = new CreateShape(primitive.shape, primitive.vertices, primitive.color);
+                    const shape = createShape.getInstance();
 
-                    preprop_scene.push( primitive );
-                    
+                    preprop_scene.push( shape );
                 }
 
-                
                 return preprop_scene;
             },
 
