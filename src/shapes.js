@@ -70,7 +70,7 @@ class Polygon{
         shape:"triangle",
         vertices: nj.array([commonPoint,polygon[i],polygon[i+1]]),
         color:this.color
-      }))      
+      }))
     }
     return triangles
   }
@@ -83,8 +83,11 @@ class Circle {
     this.radius = primitive.radius;
     this.color = primitive.color;
     this.boundingBox = new BoundingBox(primitive, true);
+    this.triangles = this.triangulation();
+
   }
-  isPointInside(x, y) {
+  isPointInsideByEquation(x, y) {
+    // calcula pela equação do circulo
     if (!this.boundingBox.isPointInside(x,y))
       return false;
     const centerX = this.center.get(0);
@@ -96,6 +99,36 @@ class Circle {
     }
     return true;
   }
+
+  isPointInside(x, y) {
+    // calcula por triangulação
+    if (!this.boundingBox.isPointInside(x,y))
+      return false;
+    for (const triangle of this.triangles) {
+      if (triangle.isPointInside(x,y))
+        return true;
+    }
+    return false;
+  }
+
+  triangulation(){
+    let triangles = []
+    const r = this.radius
+    const center = this.center.tolist();
+    let lastPoint = [center[0]+r,center[1]]; // o primeiro ponto é (X+raio,0)
+    for (let i = 0.1; i <= 2.1; i= i+0.1){
+      //pega pontos na borda do circulo
+      let currentPoint = [r*Math.cos(Math.PI*i)+center[0],r*Math.sin(Math.PI*i)+center[1]];
+      triangles.push(new Triangle({
+        shape:"triangle",
+        vertices: nj.array([center,lastPoint,currentPoint]),
+        color:this.color
+      }))
+      lastPoint=currentPoint;
+    }
+  return triangles;
+  }
+  
 }
 
 
